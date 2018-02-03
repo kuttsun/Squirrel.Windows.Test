@@ -23,6 +23,8 @@ namespace Squirrel.Windows.Test
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainWindowsViewModel();
         }
     }
 }

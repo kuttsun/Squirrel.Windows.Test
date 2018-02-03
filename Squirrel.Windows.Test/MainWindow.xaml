@@ -7,6 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Path" Grid.Row="0" Grid.Column="0"/>
+        <TextBox Text="{Binding Path}" TextWrapping="Wrap" MinLines="5" Grid.Row="0" Grid.Column="1"/>
+        <TextBlock Text="Version" Grid.Row="1" Grid.Column="0"/>
+        <TextBox Text="{Binding Version}" Grid.Row="1" Grid.Column="1"/>
     </Grid>
 </Window>
