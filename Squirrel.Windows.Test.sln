@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.Windows.Test", "Squirrel.Windows.Test\Squirrel.Windows.Test.csproj", "{FE8264C3-ECA3-48C9-A2DE-8B4801795F2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{C462A01B-E8D4-41BD-9C04-CB7DDA648173}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FE8264C3-ECA3-48C9-A2DE-8B4801795F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE8264C3-ECA3-48C9-A2DE-8B4801795F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE8264C3-ECA3-48C9-A2DE-8B4801795F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C462A01B-E8D4-41BD-9C04-CB7DDA648173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C462A01B-E8D4-41BD-9C04-CB7DDA648173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C462A01B-E8D4-41BD-9C04-CB7DDA648173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C462A01B-E8D4-41BD-9C04-CB7DDA648173}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
