@@ -30,11 +30,32 @@ namespace Squirrel.Windows.Test
 
             Button = new DelegateCommand(async () =>
             {
-                using (var mgr = new UpdateManager("C:\\Projects\\MyApp\\Releases"))
-                {
-                    var ret = await mgr.CheckForUpdate();
-                }
+                await Task.Run(() => CheckForUpdate());
             });
+        }
+
+        void CheckForUpdate()
+        {
+            //using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/Squirrel.Windows.Test/releases/latest"))
+            using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\Squirrel.Windows.Test\Releases"))
+            {
+                try
+                {
+                    var updateInfo = mgr.CheckForUpdate().Result;
+
+                    Console.WriteLine($"Current Version: {updateInfo.CurrentlyInstalledVersion}");
+                    Console.WriteLine($"Latest Version: {updateInfo.FutureReleaseEntry}");
+
+                    foreach (var entry in updateInfo.ReleasesToApply)
+                    {
+                        Console.WriteLine($"- Filename : {entry.Filename}");
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("No releases.");
+                }
+            }
         }
     }
 }
