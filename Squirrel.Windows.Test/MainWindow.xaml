@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Squirrel.Windows.Test"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="800" Width="800">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -20,6 +21,11 @@
         <TextBox Text="{Binding Path}" TextWrapping="Wrap" MinLines="5" Grid.Row="0" Grid.Column="1"/>
         <TextBlock Text="Version" Grid.Row="1" Grid.Column="0"/>
         <TextBox Text="{Binding Version}" Grid.Row="1" Grid.Column="1"/>
-        <Button Grid.Row="2" Grid.Column="0" Content="Update" Command="{Binding Button}"/>
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button  Content="UpdateCheck(Local)" Command="{Binding UpdateCheckLocalButton}"/>
+            <Button  Content="UpdateCheck(GitHub)" Command="{Binding UpdateCheckGitHubButton}"/>
+        </StackPanel>
+        
+        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Result}"/>
     </Grid>
 </Window>
