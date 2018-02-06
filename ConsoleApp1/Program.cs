@@ -23,12 +23,40 @@ namespace ConsoleApp1
 
             // アップデートがあるかどうかをチェック
             CheckForUpdate();
+            //CheckForUpdateFromGitHub();
 
             Console.ReadKey();
         }
 
         static void CheckForUpdate()
         {
+            Console.WriteLine("ローカルチェック");
+
+            using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\Squirrel.Windows.Test\Releases"))
+            {
+                try
+                {
+                    var updateInfo = mgr.CheckForUpdate().Result;
+
+                    Console.WriteLine($"Current Version: {updateInfo.CurrentlyInstalledVersion}");
+                    Console.WriteLine($"Latest Version: {updateInfo.FutureReleaseEntry}");
+
+                    foreach (var entry in updateInfo.ReleasesToApply)
+                    {
+                        Console.WriteLine($"- Filename : {entry.Filename}");
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("No releases.");
+                }
+            }
+        }
+
+        static void CheckForUpdateFromGitHub()
+        {
+            Console.WriteLine("GitHub チェック");
+
             using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/Squirrel.Windows.Test/releases/latest"))
             {
                 try
