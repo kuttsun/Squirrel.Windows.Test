@@ -35,8 +35,10 @@ namespace SquirrelWindowsTest
             set { SetProperty(ref result, value); }
         }
         string result;
-        public DelegateCommand UpdateCheckLocalButton { get; set; }
-        public DelegateCommand UpdateCheckGitHubButton { get; set; }
+        public DelegateCommand CheckForUpdateFromLocalButton { get; set; }
+        public DelegateCommand UpdateFromLocalButton { get; set; }
+        public DelegateCommand CheckForUpdateFromGitHubButton { get; set; }
+        public DelegateCommand UpdateFromGitHubButton { get; set; }
 
         public MainWindowsViewModel()
         {
@@ -46,9 +48,10 @@ namespace SquirrelWindowsTest
             //バージョン番号を表示
             Version = assembly.GetName().Version.ToString();
 
-            UpdateCheckLocalButton = new DelegateCommand(() => CheckForUpdate());
-
-            UpdateCheckGitHubButton = new DelegateCommand(() => CheckForUpdateFromGitHub());
+            CheckForUpdateFromLocalButton = new DelegateCommand(() => CheckForUpdate());
+            UpdateFromLocalButton = new DelegateCommand(() => UpdateFromLocal());
+            CheckForUpdateFromGitHubButton = new DelegateCommand(() => CheckForUpdateFromGitHub());
+            UpdateFromGitHubButton = new DelegateCommand(() => UpdateFromGitHub());
         }
 
         async void CheckForUpdate()
@@ -62,6 +65,41 @@ namespace SquirrelWindowsTest
                     var updateinfo = await mgr.CheckForUpdate();
 
                     SetUpdateInfo(ref str, updateinfo);
+                    str += "アップデート" + (UpdateExists(updateinfo) ? "あり" : "なし");
+                }
+            }
+            catch (Exception e)
+            {
+                str += e.Message + Environment.NewLine;
+                if (e.InnerException != null)
+                {
+                    str += e.InnerException + Environment.NewLine;
+                }
+            }
+
+            Result = str;
+        }
+
+        async void UpdateFromLocal()
+        {
+            string str = "ローカルからアップデート" + Environment.NewLine;
+
+            try
+            {
+                using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\SquirrelWindowsTest\Releases"))
+                {
+                    var updateinfo = await mgr.CheckForUpdate();
+
+                    if (UpdateExists(updateinfo))
+                    {
+                        var releaseEntry = await mgr.UpdateApp();
+                        str += $"{releaseEntry.Version} へアップデート開始";
+                        str += "完了" + Environment.NewLine;
+                    }
+                    else
+                    {
+                        str += "アップデートなし";
+                    }
                 }
             }
             catch (Exception e)
@@ -86,7 +124,42 @@ namespace SquirrelWindowsTest
                 {
                     var updateinfo = await mgr.CheckForUpdate();
 
-                    SetUpdateInfo(ref str, updateinfo);
+                    if (UpdateExists(updateinfo))
+                    {
+                        var releaseEntry = await mgr.UpdateApp();
+                        str += $"{releaseEntry.Version} へアップデート開始";
+                        str += "完了" + Environment.NewLine;
+                    }
+                    else
+                    {
+                        str += "アップデートなし";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                str += e.Message + Environment.NewLine;
+                if (e.InnerException != null)
+                {
+                    str += e.InnerException + Environment.NewLine;
+                }
+            }
+
+            Result = str;
+        }
+
+        async void UpdateFromGitHub()
+        {
+            string str = "GitHub からアップデート" + Environment.NewLine;
+
+            try
+            {
+                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/SquirrelWindowsTest"))
+                {
+                    var releaseEntry = await mgr.UpdateApp();
+
+                    str += $"{releaseEntry.Version} へアップデート開始";
+                    str += "完了" + Environment.NewLine;
                 }
             }
             catch (Exception e)
@@ -110,6 +183,25 @@ namespace SquirrelWindowsTest
             {
                 str += $"- Filename : {entry.Filename}" + Environment.NewLine;
                 str += $"- Version : {entry.Version}" + Environment.NewLine;
+            }
+        }
+
+        bool UpdateExists(UpdateInfo updateinfo)
+        {
+            try
+            {
+                if (updateinfo.CurrentlyInstalledVersion?.Version < updateinfo.FutureReleaseEntry?.Version)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }

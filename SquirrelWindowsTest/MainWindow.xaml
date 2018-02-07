@@ -22,8 +22,10 @@
         <TextBlock Text="Version" Grid.Row="1" Grid.Column="0"/>
         <TextBox Text="{Binding Version}" Grid.Row="1" Grid.Column="1"/>
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Button  Content="UpdateCheck(Local)" Command="{Binding UpdateCheckLocalButton}"/>
-            <Button  Content="UpdateCheck(GitHub)" Command="{Binding UpdateCheckGitHubButton}"/>
+            <Button Margin="5" Content="Check For Update(Local)" Command="{Binding CheckForUpdateFromLocalButton}"/>
+            <Button Margin="5" Content="Update(Local)" Command="{Binding UpdateFromLocalButton}"/>
+            <Button Margin="5" Content="Check For Update(GitHub)" Command="{Binding CheckForUpdateFromGitHubButton}"/>
+            <Button Margin="5" Content="Update(GitHub)" Command="{Binding UpdateFromGitHubButton}"/>
         </StackPanel>
         
         <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Result}"/>

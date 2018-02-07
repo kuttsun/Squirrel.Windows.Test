@@ -34,5 +34,5 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 [ZipFile]::CreateFromDirectory($tempDir, $targetZipFile)
 
 # delete temporary directory
-#Remove-Item -Recurse -path $tempDir
+Remove-Item -Recurse -path $tempDir
 
