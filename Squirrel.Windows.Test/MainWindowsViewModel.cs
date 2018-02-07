@@ -46,53 +46,55 @@ namespace Squirrel.Windows.Test
             //バージョン番号を表示
             Version = assembly.GetName().Version.ToString();
 
-            UpdateCheckLocalButton = new DelegateCommand(async () =>
-            {
-                await Task.Run(() => CheckForUpdate());
-            });
+            UpdateCheckLocalButton = new DelegateCommand(() => CheckForUpdate());
 
-            UpdateCheckGitHubButton = new DelegateCommand(async () =>
-            {
-                await Task.Run(() => CheckForUpdateFromGitHub());
-            });
+            UpdateCheckGitHubButton = new DelegateCommand(() => CheckForUpdateFromGitHub());
         }
 
-        void CheckForUpdate()
+        async void CheckForUpdate()
         {
             string str = "ローカルチェック" + Environment.NewLine;
 
-            using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\Squirrel.Windows.Test\Releases"))
+            try
             {
-                try
+                using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\Squirrel.Windows.Test\Releases"))
                 {
-                    var updateinfo = mgr.CheckForUpdate().Result;
+                    var updateinfo = await mgr.CheckForUpdate();
 
                     SetUpdateInfo(ref str, updateinfo);
                 }
-                catch
+            }
+            catch (Exception e)
+            {
+                str += e.Message + Environment.NewLine;
+                if (e.InnerException != null)
                 {
-                    str += "Error occurred." + Environment.NewLine;
+                    str += e.InnerException + Environment.NewLine;
                 }
             }
 
             Result = str;
         }
 
-        void CheckForUpdateFromGitHub()
+        async void CheckForUpdateFromGitHub()
         {
             string str = "GitHub チェック" + Environment.NewLine;
 
-            using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/Squirrel.Windows.Test/releases/latest"))
+            try
             {
-                try
+                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/Squirrel.Windows.Test"))
                 {
-                    var updateinfo = mgr.Result.CheckForUpdate().Result;
+                    var updateinfo = await mgr.CheckForUpdate();
 
                     SetUpdateInfo(ref str, updateinfo);
                 }
-                catch
+            }
+            catch (Exception e)
+            {
+                str += e.Message + Environment.NewLine;
+                if (e.InnerException != null)
                 {
-                    str += "Error occurred." + Environment.NewLine;
+                    str += e.InnerException + Environment.NewLine;
                 }
             }
 
@@ -107,6 +109,7 @@ namespace Squirrel.Windows.Test
             foreach (var entry in updateinfo.ReleasesToApply)
             {
                 str += $"- Filename : {entry.Filename}" + Environment.NewLine;
+                str += $"- Version : {entry.Version}" + Environment.NewLine;
             }
         }
     }
