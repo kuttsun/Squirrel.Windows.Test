@@ -12,7 +12,7 @@ using Prism.Commands;
 
 using Squirrel;
 
-namespace Squirrel.Windows.Test
+namespace SquirrelWindowsTest
 {
     class MainWindowsViewModel : BindableBase
     {
@@ -57,7 +57,7 @@ namespace Squirrel.Windows.Test
 
             try
             {
-                using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\Squirrel.Windows.Test\Releases"))
+                using (var mgr = new UpdateManager(@"C:\Users\13005\git\github\SquirrelWindowsTest\Releases"))
                 {
                     var updateinfo = await mgr.CheckForUpdate();
 
@@ -82,7 +82,7 @@ namespace Squirrel.Windows.Test
 
             try
             {
-                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/Squirrel.Windows.Test"))
+                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/kuttsun/SquirrelWindowsTest"))
                 {
                     var updateinfo = await mgr.CheckForUpdate();
 
