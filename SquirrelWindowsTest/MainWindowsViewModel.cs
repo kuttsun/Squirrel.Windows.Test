@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 
@@ -43,10 +43,23 @@ namespace SquirrelWindowsTest
         public MainWindowsViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly();
+
             //Exeの場所を表示
             Path = assembly.Location;
-            //バージョン番号を表示
-            Version = assembly.GetName().Version.ToString();
+
+            var fvi = FileVersionInfo.GetVersionInfo(Path);
+
+            var assemblyVersion = assembly.GetName().Version.ToString();
+            var fileVersion = fvi.FileVersion;
+            var productVersion = fvi.ProductVersion;
+
+
+            Version = $"{assembly.GetName().Name}" + Environment.NewLine
+                + $"AssemblyVersion: {assemblyVersion}" + Environment.NewLine
+                + $"AssemblyFileVersion: {fileVersion}" + Environment.NewLine
+                + $"AssemblyInformationalVersion: {productVersion}"+ Environment.NewLine;
+
+
 
             CheckForUpdateFromLocalButton = new DelegateCommand(() => CheckForUpdate());
             UpdateFromLocalButton = new DelegateCommand(() => UpdateFromLocal());
@@ -65,7 +78,7 @@ namespace SquirrelWindowsTest
                     var updateinfo = await mgr.CheckForUpdate();
 
                     SetUpdateInfo(ref str, updateinfo);
-                    str += "アップデート" + (UpdateExists(updateinfo) ? "あり" : "なし");
+                    str += "アップデート" + (UpdateExists(updateinfo) ? "あり" : "なし") + Environment.NewLine;
                 }
             }
             catch (Exception e)
@@ -93,12 +106,12 @@ namespace SquirrelWindowsTest
                     if (UpdateExists(updateinfo))
                     {
                         var releaseEntry = await mgr.UpdateApp();
-                        str += $"{releaseEntry.Version} へアップデート開始";
+                        str += $"{releaseEntry.Version} へアップデート開始" + Environment.NewLine;
                         str += "完了" + Environment.NewLine;
                     }
                     else
                     {
-                        str += "アップデートなし";
+                        str += "アップデートなし" + Environment.NewLine;
                     }
                 }
             }
@@ -124,16 +137,8 @@ namespace SquirrelWindowsTest
                 {
                     var updateinfo = await mgr.CheckForUpdate();
 
-                    if (UpdateExists(updateinfo))
-                    {
-                        var releaseEntry = await mgr.UpdateApp();
-                        str += $"{releaseEntry.Version} へアップデート開始";
-                        str += "完了" + Environment.NewLine;
-                    }
-                    else
-                    {
-                        str += "アップデートなし";
-                    }
+                    SetUpdateInfo(ref str, updateinfo);
+                    str += "アップデート" + (UpdateExists(updateinfo) ? "あり" : "なし") + Environment.NewLine;
                 }
             }
             catch (Exception e)
